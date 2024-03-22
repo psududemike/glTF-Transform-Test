@@ -16,8 +16,8 @@ jobs:
         needs: gather-testing-data
         strategy:
             matrix:
-                transform: ['resample']
-                models: ['AlphaBlendModeTest/glTF-Binary/AlphaBlendModeTest.glb']
+                transform: ['draco', 'optimize']
+                models: ['AlphaBlendModeTest/glTF-Binary/AlphaBlendModeTest.glb', 'AnimatedMorphCube/glTF-Binary/AnimatedMorphCube.glb']
         runs-on: ubuntu-latest
         steps:
             - name: Get assets
