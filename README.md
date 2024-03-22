@@ -2,8 +2,8 @@
 
 ```mermaid
 flowchart LR
-  Gather Testing Data (git clone) --> Install glTF Transform
-  Install glTF Transform --> Create list of transforms to test
-  Create list of transforms to test --> Apply transforms to each test case
-  Apply transforms to each test case --> Gather Statistics on each test
+  id1[Gather Testing Data] --> id2[Install glTF Transform]
+  id2 --> id3[Create list of transforms to test]
+  id3 --> id4[Apply transforms to each test case]
+  id4 --> id5[Gather Statistics on each test]
 ```
