@@ -5,14 +5,24 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - run: git clone https://github.com/KhronosGroup/glTF-Sample-Assets.git
+            - name: Cache for testing
+              id: asset-cache
+              uses: actions/cache@v3
+              with:
+                path:  ~/glTF-Sample-Assets
+                key: ${{ runner.os }}-assets
+
     test-transform:
         needs: gather-testing-data
         strategy:
             matrix:
                 transform: ['resample']
-                models: ['AlphaBlendModeTest/gITF-Binary/AlphaBlendModeTest.glb']
+                models: ['AlphaBlendModeTest/glTF-Binary/AlphaBlendModeTest.glb']
         runs-on: ubuntu-latest
         steps:
+            - name: Get assets
+              if: needs.gather-testing-data.outputs.cache-hit != 'true'
+              run: git clone https://github.com/KhronosGroup/glTF-Sample-Assets.git
             - name: "Setup NodeJS"
               uses: actions/setup-node@v4
             - name: "Install glTF-transform"
