@@ -15,6 +15,8 @@ jobs:
     test-transform:
         needs: gather-testing-data
         strategy:
+            fail-fast: true
+            max-parallel: 2
             matrix:
                 transform: ['draco', 'optimize']
                 models: ['AlphaBlendModeTest/glTF-Binary/AlphaBlendModeTest.glb', 'AnimatedMorphCube/glTF-Binary/AnimatedMorphCube.glb']
@@ -30,6 +32,6 @@ jobs:
             - name: "Apply transform"
               run: gltf-transform ${{ matrix.transform }} glTF-Sample-Assets/Models/${{ matrix.models }} output.glb
             - name: "Inspect data"
-              run: gltf-transform inspect output.glb
+              run: diff `gltf-transform inspect output.glb` `glTF-Sample-Assets/Models/${{ matrix.models }}`
  
     
