@@ -19,7 +19,7 @@ jobs:
             max-parallel: 2
             matrix:
                 transform: ['draco', 'optimize']
-                models: ['AlphaBlendModeTest/glTF-Binary/AlphaBlendModeTest.glb', 'AnimatedMorphCube/glTF-Binary/AnimatedMorphCube.glb']
+                models: ['AlphaBlendModeTest', 'AnimatedMorphCube']
         runs-on: ubuntu-latest
         steps:
             - name: "Checkout repo"
@@ -32,19 +32,17 @@ jobs:
             - name: "Install glTF-transform"
               run: npm install --global @gltf-transform/cli
             - name: "Apply transform"
-              run: gltf-transform ${{ matrix.transform }} glTF-Sample-Assets/Models/${{ matrix.models }} output.glb
+              run: gltf-transform ${{ matrix.transform }} glTF-Sample-Assets/Models/${{ matrix.models }}/glTF-Binary/${{ matrix.models }}.glb output.glb
             - name: "Inspect data"
               id: data 
               run: |
                 gltf-transform inspect output.glb --format csv > output-data.txt
-                gltf-transform inspect glTF-Sample-Assets/Models/${{ matrix.models }} --format csv > input-data.txt
-                export SHORT=`echo "${{matrix.models}}" | tr '/' '\n' | head -n 1`
-                echo $SHORT > "$GITHUB_OUTPUTS"
-                echo "Testing ${{ matrix.transform }} on ${{matrix.models}}" > testing-${{ matrix.transform }}-$SHORT.txt
-                python parseData.py input-data.txt output-data.txt >> testing-${{ matrix.transform }}-$SHORT.txt
+                gltf-transform inspect glTF-Sample-Assets/Models/${{ matrix.models }}/glTF-Binary/${{ matrix.models }}.glb --format csv > input-data.txt
+                echo "Testing ${{ matrix.transform }} on ${{matrix.models}}" > testing-${{ matrix.transform }}-${{matrix.models}}.txt
+                python parseData.py input-data.txt output-data.txt >> testing-${{ matrix.transform }}-${{matrix.models}}.txt
             - name: "Publish results"
               uses: actions/upload-artifact@v4
               with:
-                name: Test-${{ matrix.transform }}-${{ steps.data.outputs }}
+                name: Test-${{ matrix.transform }}-${{matrix.models}}
                 path: testing-*.txt
     
