@@ -34,15 +34,17 @@ jobs:
             - name: "Apply transform"
               run: gltf-transform ${{ matrix.transform }} glTF-Sample-Assets/Models/${{ matrix.models }} output.glb
             - name: "Inspect data"
+              id: data 
               run: |
                 gltf-transform inspect output.glb --format csv > output-data.txt
                 gltf-transform inspect glTF-Sample-Assets/Models/${{ matrix.models }} --format csv > input-data.txt
                 export SHORT=`echo "${{matrix.models}}" | tr '/' '\n' | head -n 1`
+                echo $SHORT > "$GITHUB_OUTPUTS"
                 echo "Testing ${{ matrix.transform }} on ${{matrix.models}}" > testing-${{ matrix.transform }}-$SHORT.txt
                 python parseData.py input-data.txt output-data.txt >> testing-${{ matrix.transform }}-$SHORT.txt
             - name: "Publish results"
               uses: actions/upload-artifact@v4
               with:
-                name: Test-log
+                name: Test-${{ matrix.transform }}-${{ steps.data.outputs }}
                 path: testing-*.txt
     
