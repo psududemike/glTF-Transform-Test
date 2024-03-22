@@ -27,11 +27,11 @@ def getVertices(csv):
     row = next(csv)
     while row != None:
         if ''.join(row) == ' MESHES':
-            print(''.join(next(csv))) #drop dashes
+            next(csv) #drop dashes
             next(csv) #drop header
             row = next(csv) #first row of data
             while ''.join(row) != '':
-                print (row[5])
+                # print (row[5])
                 if int(row[5]) > 0:
                     nVerts += int(row[5])
                 row = next(csv)
@@ -39,11 +39,28 @@ def getVertices(csv):
             row = next(csv)
             continue
  
-        print ("Number of Vertices is " + str(nVerts))
+        # print ("Number of Vertices is " + str(nVerts))
         return nVerts 
 
-def getMeshes(csv):
-    print ("Output the number of meshes")
+def getMeshes(csv):    
+    meshes = 0
+    row = next(csv)
+    while row != None:
+        if ''.join(row) == ' MESHES':
+            next(csv) #drop dashes
+            next(csv) #drop header
+            row = next(csv) #first row of data
+            while ''.join(row) != '':
+                # print (row[5])
+                if int(row[0]) > 0:
+                    meshes = int(row[0])
+                row = next(csv)
+        else:
+            row = next(csv)
+            continue
+ 
+        # print ("Number of Meshes is " + str(meshes))
+        return meshes 
 
 def getMaterials(csv):
     print ("Output the number of materials")
@@ -74,3 +91,9 @@ with open(args.inputData, newline='') as inputCSV:
         print ("Comparing Vertices")
         compare(getVertices(originalreader),getVertices(optimizedreader))
 
+with open(args.inputData, newline='') as inputCSV:
+    with open(args.outputData, newline="") as outputCSV:
+        originalreader = csv.reader(inputCSV)
+        optimizedreader = csv.reader(outputCSV)
+        print ("Comparing Number of Meshes")
+        compare(getMeshes(originalreader),getMeshes(optimizedreader))
