@@ -22,6 +22,8 @@ jobs:
                 models: ['AlphaBlendModeTest/glTF-Binary/AlphaBlendModeTest.glb', 'AnimatedMorphCube/glTF-Binary/AnimatedMorphCube.glb']
         runs-on: ubuntu-latest
         steps:
+            - name: "Checkout repo"
+              uses: actions/checkout@v4
             - name: Get assets
               if: needs.gather-testing-data.outputs.cache-hit != 'true'
               run: git clone https://github.com/KhronosGroup/glTF-Sample-Assets.git
@@ -35,5 +37,5 @@ jobs:
               run: |
                 gltf-transform inspect output.glb --format csv > output-data.txt
                 gltf-transform inspect glTF-Sample-Assets/Models/${{ matrix.models }} --format csv > input-data.txt
-                python parseData.py output-data.txt input-data.txt
+                python parseData.py input-data.txt output-data.txt
     
