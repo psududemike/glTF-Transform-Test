@@ -32,6 +32,8 @@ jobs:
             - name: "Apply transform"
               run: gltf-transform ${{ matrix.transform }} glTF-Sample-Assets/Models/${{ matrix.models }} output.glb
             - name: "Inspect data"
-              run: diff `gltf-transform inspect output.glb` `glTF-Sample-Assets/Models/${{ matrix.models }}`
- 
+              run: |
+                gltf-transform inspect output.glb --format csv > output-data.txt
+                gltf-transform inspect glTF-Sample-Assets/Models/${{ matrix.models }} --format csv > input-data.txt
+                python parseData.py output-data.txt input-data.txt
     
