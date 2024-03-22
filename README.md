@@ -6,10 +6,11 @@ This pipeline allows the specification of multiple transforms and sample models 
 
 ## Differences analyzed
 
-Total Mesh size
-Number of Vertices
-Number of Meshes
-
+| Analysis | Description |
+| -----------| ------- |
+| Total Mesh size |   |
+| Number of Vertices |   | 
+| Number of Meshes |   |
 
 ## Pipeline flow
 
