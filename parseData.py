@@ -58,7 +58,9 @@ def getMeshes(csv):
         else:
             row = next(csv)
             continue
- 
+        
+        # adjust for index from 0
+        meshes +=1
         # print ("Number of Meshes is " + str(meshes))
         return meshes 
 
@@ -69,7 +71,10 @@ def getTextureSize(csv):
     print ("Getting the texture size of this file")
 
 def compare(original, optimized):
-    print("Optimized file is " + str(optimized/original) + "% of the original")
+    if original != 0:
+        print("Optimized file is " + str((optimized/original)*100) + "% of the original")
+    else:
+        print("Cannot compare these files")
 
 parser = ArgumentParser()
 parser.add_argument('inputData')
