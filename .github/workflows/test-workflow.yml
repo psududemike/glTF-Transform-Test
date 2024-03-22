@@ -1,0 +1,25 @@
+name: test glTF Transform
+on: [push]
+jobs:
+    gather-testing-data:
+        runs-on: ubuntu-latest
+        steps:
+            - run: git clone https://github.com/KhronosGroup/glTF-Sample-Assets.git
+    test-transform:
+        needs: gather-testing-data
+        strategy:
+            matrix:
+                transform: ['resample']
+                models: ['AlphaBlendModeTest/gITF-Binary/AlphaBlendModeTest.glb']
+        runs-on: ubuntu-latest
+        steps:
+            - name: "Setup NodeJS"
+              uses: actions/setup-node@v4
+            - name: "Install glTF-transform"
+              run: npm install --global @gltf-transform/cli
+            - name: "Apply transform"
+              run: gltf-transform ${{ matrix.transform }} glTF-Sample-Assets/Models/${{ matrix.models }} output.glb
+            - name: "Inspect data"
+              run: gltf-transform inspect output.glb
+ 
+    
